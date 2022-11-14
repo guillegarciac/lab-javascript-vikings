@@ -11,6 +11,7 @@ class Soldier {
     this.health = this.health - damage;
   }
 }
+
 // Viking
 class Viking extends Soldier {
   constructor(name, health, strength) {
@@ -56,7 +57,9 @@ class War {
   addSaxon(saxon){
     this.saxonArmy.push(saxon);
   }
-  vikingAttack(){
+
+  // Separate Methods to attack in each side
+/*   vikingAttack(){
     const randomSaxon = this.saxonArmy[Math.floor(Math.random() * this.saxonArmy.length)];
     const randomViking = this.vikingArmy[Math.floor(Math.random() * this.vikingArmy.length)];
     const vikingAttackResult = randomSaxon.receiveDamage(randomViking.strength);
@@ -73,7 +76,27 @@ class War {
       this.vikingArmy.shift();
     }
     return saxonAttackResult;
-  }
+  } */
+
+  // Unify attack methods
+  vikingSaxonAttack(side){
+    const randomSaxon = this.saxonArmy[Math.floor(Math.random() * this.saxonArmy.length)];
+    const randomViking = this.vikingArmy[Math.floor(Math.random() * this.vikingArmy.length)];
+    let attackResult = null;
+    if (side === 'saxon') {
+      attackResult = randomSaxon.receiveDamage(randomViking.strength);
+      if (randomSaxon.health <= 0) {
+        this.saxonArmy.shift();
+      }
+    } else {
+      attackResult = randomViking.receiveDamage(randomSaxon.strength);
+      if (randomViking.health <= 0) {
+        this.vikingArmy.shift();
+      }
+    }
+    return attackResult;
+  };
+
   showStatus(){
     if (this.saxonArmy.length === 0) {
       return `Vikings have won the war of the century!`
@@ -83,3 +106,13 @@ class War {
       return `Vikings and Saxons are still in the thick of battle.`
     }
   }
+
+//Other
+const guilleTheViking = new Viking('Guille VK', 100, 40);
+const markTheSaxon = new Saxon(100, 25)
+console.log(guilleTheViking.attack(markTheSaxon.receiveDamage()));
+
+
+
+
+
